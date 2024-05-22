@@ -1,0 +1,50 @@
+pipeline{
+    agent any
+    stages{
+		stage('Git-Checkout') {
+            steps {
+				git branch: 'main', credentialsId: 'f3c3ab4e-21de-4f71-9cb9-d5bae8090cf5', url: 'https://github.com/jaikumar-mohan/Jenkins_Pipeline.git'
+				echo 'Git-Checkout Successful!'
+            }
+        }
+        stage('Compile') {
+            steps {
+                echo 'Compile Started!'
+				bat 'Build.bat'
+            }
+        }
+        stage('JUnit') {
+            steps {
+                 echo 'JUnit Started!'
+				 bat 'Unit.bat'
+            }
+        }
+        stage('Quality-Check') {
+            steps {
+                echo 'Quality Check Started'
+				bat 'Quality.bat'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deployement Started'
+				bat 'Deploy.bat'
+            }
+        }
+    }
+	post{
+		always{
+			echo 'This will always run'
+		}
+		success{
+			echo 'This will run if successful'
+		}
+		failure{
+			echo 'This will run if failure'
+		}
+		changed{
+			echo 'This will run only if status of the pipeline changed'
+			echo 'For example, if the pipeline was previously failing and now it was successful'
+		}
+	}
+}
