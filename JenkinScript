@@ -1,5 +1,7 @@
 pipeline{
-    agent any
+    agent {
+	label 'win_node'
+    }
     stages{
 		stage('Git-Checkout') {
             steps {
